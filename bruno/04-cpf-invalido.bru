@@ -1,0 +1,23 @@
+meta {
+  name: Cadastro com CPF inválido
+  type: http
+  seq: 4
+}
+post {
+  url: {{baseUrl}}/api/usuarios/cadastro
+  body: json
+  auth: none
+}
+headers {
+  Content-Type: application/json
+}
+body:json {
+  { "nome": "Pessoa Fictícia", "email": "cpf.invalido@example.test", "senha": "Camera@2026", "cpf": "111.111.111-11" }
+}
+tests {
+  test("retorna HTTP 400", function () { expect(res.getStatus()).to.equal(400); });
+  test("identifica o campo CPF", function () { expect(res.getBody().error.fields).to.have.property("cpf"); });
+}
+docs {
+  Resposta esperada: HTTP 400; sequências repetidas são rejeitadas mesmo quando os dígitos parecem formatados.
+}

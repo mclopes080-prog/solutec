@@ -1,0 +1,26 @@
+meta {
+  name: Cadastro com e-mail duplicado
+  type: http
+  seq: 7
+}
+post {
+  url: {{baseUrl}}/api/usuarios/cadastro
+  body: json
+  auth: none
+}
+headers {
+  Content-Type: application/json
+}
+body:json {
+  { "nome": "Outra Pessoa Fictícia", "email": "pessoa.sprint1@example.test", "senha": "Outra@2026", "cpf": "168.995.350-09" }
+}
+tests {
+  test("retorna HTTP 409", function () { expect(res.getStatus()).to.equal(409); });
+  test("informa conflito de e-mail", function () {
+    expect(res.getBody().error.code).to.equal("CONFLICT");
+    expect(res.getBody().error.fields).to.have.property("email");
+  });
+}
+docs {
+  Pré-condição: executar com sucesso o teste 02. Resposta esperada: HTTP 409, sem detalhes internos do banco.
+}

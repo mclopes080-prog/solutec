@@ -1,0 +1,32 @@
+# Dependências
+node_modules/
+
+# Variáveis e credenciais locais
+.env
+.env.*
+!.env.example
+backend/.env
+frontend/.env
+
+# Builds e cobertura
+dist/
+build/
+coverage/
+*.tsbuildinfo
+
+# Logs e temporários
+*.log
+npm-debug.log*
+.cache/
+.tmp/
+tmp/
+
+# Editores e sistema operacional
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Prisma local (o projeto usa MySQL; evita bancos acidentais)
+*.db
+*.db-journal

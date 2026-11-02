@@ -1,0 +1,26 @@
+meta {
+  name: Cadastro com CPF duplicado
+  type: http
+  seq: 8
+}
+post {
+  url: {{baseUrl}}/api/usuarios/cadastro
+  body: json
+  auth: none
+}
+headers {
+  Content-Type: application/json
+}
+body:json {
+  { "nome": "Outra Pessoa Fictícia", "email": "outro.email@example.test", "senha": "Outra@2026", "cpf": "52998224725" }
+}
+tests {
+  test("retorna HTTP 409", function () { expect(res.getStatus()).to.equal(409); });
+  test("informa conflito de CPF", function () {
+    expect(res.getBody().error.code).to.equal("CONFLICT");
+    expect(res.getBody().error.fields).to.have.property("cpf");
+  });
+}
+docs {
+  Pré-condição: executar com sucesso o teste 02. Resposta esperada: HTTP 409, demonstrando que CPF pontuado e não pontuado são o mesmo registro.
+}

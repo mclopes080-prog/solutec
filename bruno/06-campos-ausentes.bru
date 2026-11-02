@@ -1,0 +1,28 @@
+meta {
+  name: Cadastro com campos obrigatórios ausentes
+  type: http
+  seq: 6
+}
+post {
+  url: {{baseUrl}}/api/usuarios/cadastro
+  body: json
+  auth: none
+}
+headers {
+  Content-Type: application/json
+}
+body:json {
+  { "nome": "Pessoa Fictícia" }
+}
+tests {
+  test("retorna HTTP 400", function () { expect(res.getStatus()).to.equal(400); });
+  test("lista campos ausentes", function () {
+    const fields = res.getBody().error.fields;
+    expect(fields).to.have.property("email");
+    expect(fields).to.have.property("senha");
+    expect(fields).to.have.property("cpf");
+  });
+}
+docs {
+  Resposta esperada: HTTP 400 com erros para `email`, `senha` e `cpf`.
+}

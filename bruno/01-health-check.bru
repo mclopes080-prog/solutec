@@ -1,0 +1,25 @@
+meta {
+  name: Health check
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/health
+  body: none
+  auth: none
+}
+
+tests {
+  test("retorna HTTP 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+  test("informa que o serviço está saudável", function () {
+    expect(res.getBody().success).to.equal(true);
+    expect(res.getBody().status).to.equal("ok");
+  });
+}
+
+docs {
+  Resposta esperada: 200 com `{ "success": true, "status": "ok", "service": "solutec-api" }`.
+}

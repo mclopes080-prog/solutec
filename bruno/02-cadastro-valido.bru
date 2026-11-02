@@ -1,0 +1,42 @@
+meta {
+  name: Cadastro de usuário válido
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/usuarios/cadastro
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "nome": "Pessoa Fictícia de Teste",
+    "email": "pessoa.sprint1@example.test",
+    "senha": "Camera@2026",
+    "cpf": "529.982.247-25"
+  }
+}
+
+tests {
+  test("retorna HTTP 201", function () {
+    expect(res.getStatus()).to.equal(201);
+  });
+  test("retorna usuário sem senha ou hash", function () {
+    const body = res.getBody();
+    expect(body.success).to.equal(true);
+    expect(body.data.usuario).to.have.property("id");
+    expect(body.data.usuario.email).to.equal("pessoa.sprint1@example.test");
+    expect(body.data.usuario).not.to.have.property("senha");
+    expect(body.data.usuario).not.to.have.property("senhaHash");
+  });
+}
+
+docs {
+  Resposta esperada: HTTP 201, mensagem de sucesso e dados públicos do usuário. Execute uma única vez em banco limpo; este registro é a pré-condição dos testes 07 e 08.
+}

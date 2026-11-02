@@ -1,0 +1,4 @@
+.brand { display: inline-flex; align-items: center; gap: .65rem; color: #f8fbff; font-size: 1.45rem; font-weight: 500; letter-spacing: -.04em; text-decoration: none; }
+.brand strong { color: var(--electric); font-weight: 800; }
+.mark { display: grid; width: 2.2rem; height: 2.2rem; place-items: center; border: 1px solid rgba(67, 177, 255, .4); border-radius: .7rem; background: rgba(11, 125, 255, .14); box-shadow: 0 0 24px rgba(11, 125, 255, .15); }
+.mark svg { width: 1.55rem; stroke: var(--electric); stroke-width: 1.6; }
