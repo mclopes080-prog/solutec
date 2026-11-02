@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="460" viewBox="0 0 800 460" role="img" aria-labelledby="title desc">
+  <title id="title">Dispersão e regressão linear das vendas mensais</title>
+  <desc id="desc">Pontos mensais de janeiro a junho e reta estimada y igual a 7,8 mais 0,77 vezes o índice do mês, com R quadrado igual a 0,60.</desc>
+  <rect width="800" height="460" rx="16" fill="#f7f9fc"/>
+  <text x="55" y="48" font-family="Arial" font-size="22" font-weight="700" fill="#0b2340">Dispersão e regressão linear</text>
+  <text x="55" y="72" font-family="Arial" font-size="12" fill="#687b91">Totais mensais simulados — ŷ = 7,80 + 0,77x; R² = 0,60</text>
+  <g stroke="#dce5ef"><path d="M80 120H750M80 180H750M80 240H750M80 300H750M80 360H750"/></g>
+  <g font-family="Arial" font-size="12" fill="#6b7d90"><text x="55" y="364">6</text><text x="55" y="304">8</text><text x="49" y="244">10</text><text x="49" y="184">12</text><text x="49" y="124">14</text><text x="90" y="398">Jan</text><text x="218" y="398">Fev</text><text x="346" y="398">Mar</text><text x="474" y="398">Abr</text><text x="602" y="398">Mai</text><text x="724" y="398">Jun</text></g>
+  <path d="M100 282.9 L740 167.1" fill="none" stroke="#f28c28" stroke-width="4" stroke-linecap="round"/>
+  <g fill="#087fe9" stroke="#fff" stroke-width="3"><circle cx="100" cy="300" r="8"/><circle cx="228" cy="240" r="8"/><circle cx="356" cy="270" r="8"/><circle cx="484" cy="150" r="8"/><circle cx="612" cy="210" r="8"/><circle cx="740" cy="180" r="8"/></g>
+  <g font-family="Arial" font-size="12" font-weight="700" fill="#0b69bb"><text x="88" y="286">8</text><text x="214" y="226">10</text><text x="344" y="256">9</text><text x="470" y="136">13</text><text x="598" y="196">11</text><text x="726" y="166">12</text></g>
+  <g font-family="Arial" font-size="12"><circle cx="540" cy="100" r="6" fill="#087fe9"/><text x="553" y="104" fill="#40566d">Observado</text><path d="M635 100H663" stroke="#f28c28" stroke-width="4"/><text x="670" y="104" fill="#40566d">Regressão</text></g>
+</svg>
