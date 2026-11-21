@@ -1,0 +1,7 @@
+.grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+.card { display: grid; gap: .45rem; padding: 1.5rem; border: 1px solid #dde6ef; border-radius: 1rem; background: #fff; color: #0c2038; text-decoration: none; transition: transform .15s, box-shadow .15s; }
+.card:hover { transform: translateY(-3px); box-shadow: 0 16px 34px rgba(0,0,0,.25); }
+.card p { margin: 0; color: #697b8e; font-size: .85rem; line-height: 1.55; }
+.card em { color: #087fe9; font-size: .8rem; font-style: normal; font-weight: 750; }
+.icone { width: 2.6rem; height: 2.6rem; display: grid; place-items: center; border-radius: .7rem; background: #eaf4ff; color: #087fe9; font-size: 1.3rem; }
+@media (max-width: 640px) { .grid { grid-template-columns: 1fr; } }

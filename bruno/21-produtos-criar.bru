@@ -1,0 +1,52 @@
+meta {
+  name: Produtos — criar
+  type: http
+  seq: 21
+}
+
+post {
+  url: {{baseUrl}}/api/produtos
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "nome": "Câmera Bruno de Teste",
+    "descricao": "Produto criado pela coleção Bruno.",
+    "preco": 150.5,
+    "estoque": 10,
+    "imagemUrl": null,
+    "ativo": true,
+    "categoriaId": "{{categoriaId}}"
+  }
+}
+
+script:post-response {
+  if (res.getStatus() === 201) {
+    bru.setVar("produtoId", res.getBody().data.id);
+    bru.setVar("produtoPreco", res.getBody().data.preco);
+  }
+}
+
+tests {
+  test("retorna HTTP 201", function () {
+    expect(res.getStatus()).to.equal(201);
+  });
+  test("vincula à categoria (N:1)", function () {
+    expect(res.getBody().data.categoriaId).to.equal(bru.getVar("categoriaId"));
+    expect(res.getBody().data.categoria).to.have.property("nome");
+  });
+}
+
+docs {
+  Depende de `categoriaId` (Categorias — criar). Salva `produtoId`.
+}

@@ -1,0 +1,25 @@
+meta {
+  name: Endereços — listar (só os meus)
+  type: http
+  seq: 25
+}
+
+get {
+  url: {{baseUrl}}/api/enderecos?page=1&limit=10
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("retorna HTTP 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+  test("todos pertencem ao usuário logado", function () {
+    const ids = res.getBody().data.map(function (e) { return e.usuarioId; });
+    ids.forEach(function (id) { expect(id).to.equal(ids[0]); });
+  });
+}

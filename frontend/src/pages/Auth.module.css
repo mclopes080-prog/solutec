@@ -1,0 +1,25 @@
+.page { padding: 4.5rem 0 6rem; background: radial-gradient(circle at 15% 30%,rgba(12,125,246,.12),transparent 30%), #061426; }
+.grid { display: grid; grid-template-columns: .78fr 1.22fr; align-items: center; gap: clamp(3rem,7vw,7rem); }
+.gridEstreito { grid-template-columns: .9fr 1fr; }
+.eyebrow { color: #43a8ff; font-size: .72rem; font-weight: 800; letter-spacing: .17em; text-transform: uppercase; }
+.intro h1 { margin: 1rem 0 1.3rem; color: white; font-size: clamp(2.6rem,5vw,4.2rem); letter-spacing: -.06em; line-height: 1; }
+.intro h1 em { color: #2298ff; font-style: normal; }
+.intro > p { color: #92a7bf; line-height: 1.75; }
+.intro ul { display: grid; gap: 1.2rem; margin: 2rem 0 0; padding: 0; list-style: none; }
+.intro li { display: flex; gap: .85rem; color: white; }
+.intro li > span { width: 1.65rem; height: 1.65rem; display: grid; flex: 0 0 auto; place-items: center; border-radius: 50%; background: rgba(25,150,255,.15); color: #43a8ff; font-size: .72rem; }
+.intro li small { display: block; margin-top: .2rem; color: #7289a2; font-size: .75rem; }
+.card { padding: clamp(1.5rem,4vw,3rem); border: 1px solid #dce6ef; border-radius: 1.1rem; background: #fbfdff; box-shadow: 0 30px 70px rgba(0,0,0,.3); }
+.card header > span { color: #0b82ee; font-size: .63rem; font-weight: 800; letter-spacing: .15em; }
+.card h2 { margin: .35rem 0; color: #0b2038; font-size: 1.7rem; letter-spacing: -.035em; }
+.card header p { margin: 0 0 1.8rem; color: #718296; font-size: .86rem; }
+.card form { display: grid; gap: 1.15rem; }
+.row { display: grid; grid-template-columns: 1.1fr .9fr; gap: 1rem; }
+.passwordWrap { position: relative; }
+.passwordWrap input { padding-right: 4.8rem !important; }
+.passwordWrap button { position: absolute; top: 50%; right: .75rem; border: 0; background: none; color: #087fe9; font-size: .69rem; font-weight: 750; transform: translateY(-50%); cursor: pointer; }
+.submit { width: 100%; min-height: 3.1rem; margin-top: .35rem; }
+.rodape { margin: 1.5rem 0 0; color: #708196; font-size: .77rem; text-align: center; }
+.rodape a { color: #087fe9; font-weight: 750; text-decoration: none; }
+@media (max-width: 850px) { .grid, .gridEstreito { grid-template-columns: 1fr; } .intro { max-width: 600px; } .page { padding-top: 3rem; } }
+@media (max-width: 560px) { .row { grid-template-columns: 1fr; } .card { padding: 1.35rem; } .intro ul { display: none; } }

@@ -1,12 +1,7 @@
 import { Router } from "express";
-import { UsuarioController } from "../controllers/UsuarioController.js";
-import { PrismaUsuarioRepository } from "../repositories/PrismaUsuarioRepository.js";
-import { CadastrarUsuarioService } from "../services/CadastrarUsuarioService.js";
-import { BcryptPasswordHasher } from "../services/passwordHasher.js";
-
-const repository = new PrismaUsuarioRepository();
-const service = new CadastrarUsuarioService(repository, new BcryptPasswordHasher());
-const controller = new UsuarioController(service);
+import { autenticar, usuarioController } from "../container.js";
 
 export const usuarioRoutes = Router();
-usuarioRoutes.post("/usuarios/cadastro", controller.cadastro);
+usuarioRoutes.post("/usuarios/cadastro", usuarioController.cadastro);
+usuarioRoutes.get("/usuarios/me", autenticar, usuarioController.me);
+usuarioRoutes.put("/usuarios/me", autenticar, usuarioController.atualizarMe);

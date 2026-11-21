@@ -1,0 +1,20 @@
+meta {
+  name: Catálogo público (sem token)
+  type: http
+  seq: 40
+}
+
+get {
+  url: {{baseUrl}}/api/catalogo?page=1&limit=8
+  body: none
+  auth: none
+}
+
+tests {
+  test("retorna HTTP 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+  test("só lista produtos ativos", function () {
+    res.getBody().data.forEach(function (p) { expect(p.ativo).to.equal(true); });
+  });
+}

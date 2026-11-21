@@ -1,0 +1,21 @@
+meta {
+  name: Produtos — buscar inexistente (404)
+  type: http
+  seq: 24
+}
+
+get {
+  url: {{baseUrl}}/api/produtos/id-que-nao-existe
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("retorna HTTP 404", function () {
+    expect(res.getStatus()).to.equal(404);
+  });
+}

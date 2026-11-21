@@ -1,0 +1,54 @@
+meta {
+  name: Pedidos — criar
+  type: http
+  seq: 30
+}
+
+post {
+  url: {{baseUrl}}/api/pedidos
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "enderecoId": "{{enderecoId}}",
+    "itens": [
+      {
+        "produtoId": "{{produtoId}}",
+        "quantidade": 2
+      }
+    ]
+  }
+}
+
+script:post-response {
+  if (res.getStatus() === 201) {
+    bru.setVar("pedidoId", res.getBody().data.id);
+  }
+}
+
+tests {
+  test("retorna HTTP 201", function () {
+    expect(res.getStatus()).to.equal(201);
+  });
+  test("congela o preço e calcula o total no servidor", function () {
+    const pedido = res.getBody().data;
+    const preco = Number(bru.getVar("produtoPreco"));
+    expect(pedido.status).to.equal("PENDENTE");
+    expect(pedido.itens[0].precoUnitario).to.equal(preco);
+    expect(pedido.total).to.equal(Math.round(preco * 2 * 100) / 100);
+  });
+}
+
+docs {
+  O cliente não envia preço nem total. Salva `pedidoId`.
+}

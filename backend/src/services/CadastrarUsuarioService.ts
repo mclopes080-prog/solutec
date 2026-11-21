@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import { Usuario } from "../entities/Usuario.js";
+import { Usuario, type UsuarioResposta } from "../entities/Usuario.js";
 import { ConflictError } from "../errors/AppError.js";
 import type { IUsuarioRepository } from "../repositories/IUsuarioRepository.js";
 import type { CadastroUsuarioInput } from "../validators/usuario.validator.js";
@@ -11,7 +11,7 @@ export class CadastrarUsuarioService {
     private readonly passwordHasher: PasswordHasher
   ) {}
 
-  async executar(input: CadastroUsuarioInput): Promise<ReturnType<Usuario["paraResposta"]>> {
+  async executar(input: CadastroUsuarioInput): Promise<UsuarioResposta> {
     const [emailExistente, cpfExistente] = await Promise.all([
       this.usuarios.buscarPorEmail(input.email),
       this.usuarios.buscarPorCpf(input.cpf)

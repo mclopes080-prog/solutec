@@ -1,0 +1,24 @@
+.page { min-height: 650px; padding: 4rem 0 6rem; background: radial-gradient(circle at 50% 0%, rgba(19,132,244,.14), transparent 35%), #061426; }
+.cabecalho { max-width: 640px; margin-bottom: 2.5rem; }
+.cabecalho span { color: #43a8ff; font-size: .72rem; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+.cabecalho h1 { margin: .7rem 0 .8rem; color: #fff; font-size: clamp(2rem, 4vw, 3rem); letter-spacing: -.05em; line-height: 1.05; }
+.cabecalho p { margin: 0; color: #92a7bf; line-height: 1.7; }
+.grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.1rem; }
+.card { display: flex; flex-direction: column; overflow: hidden; border: 1px solid #dde6ef; border-radius: 1rem; background: #fff; color: #0c2038; transition: transform .2s, box-shadow .2s; }
+.card:hover { transform: translateY(-4px); box-shadow: 0 18px 38px rgba(0,0,0,.3); }
+.imagem { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; background: #0b2747; }
+.corpo { display: flex; flex: 1; flex-direction: column; gap: .4rem; padding: 1rem 1.1rem 1.2rem; }
+.categoria { color: #087fe9; font-size: .66rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+.corpo h2 { margin: 0; font-size: 1rem; letter-spacing: -.02em; }
+.corpo p { flex: 1; margin: 0; color: #697b8e; font-size: .82rem; line-height: 1.55; }
+.rodape { display: flex; justify-content: space-between; align-items: center; gap: .5rem; margin-top: .5rem; }
+.rodape strong { font-size: 1.15rem; letter-spacing: -.02em; }
+.disponivel, .esgotado { padding: .2rem .5rem; border-radius: 999px; font-size: .66rem; font-weight: 750; }
+.disponivel { background: #e6f6ef; color: #147658; }
+.esgotado { background: #fdecec; color: #a62f2f; }
+.esqueleto { min-height: 320px; background: linear-gradient(90deg, #0d2340, #12304f, #0d2340); background-size: 200% 100%; border-color: transparent; animation: brilho 1.4s infinite; }
+.vazio { padding: 2rem; color: #92a7bf; text-align: center; }
+.cta { display: flex; justify-content: center; margin-top: 2.5rem; }
+@keyframes brilho { to { background-position: -200% 0; } }
+@media (max-width: 1000px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .grid { grid-template-columns: 1fr; } }

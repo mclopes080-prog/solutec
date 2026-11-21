@@ -1,0 +1,35 @@
+meta {
+  name: Categorias — editar inexistente (404)
+  type: http
+  seq: 19
+}
+
+put {
+  url: {{baseUrl}}/api/categorias/id-que-nao-existe
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "nome": "Qualquer",
+    "descricao": null
+  }
+}
+
+tests {
+  test("retorna HTTP 404", function () {
+    expect(res.getStatus()).to.equal(404);
+  });
+  test("código NOT_FOUND", function () {
+    expect(res.getBody().error.code).to.equal("NOT_FOUND");
+  });
+}

@@ -1,0 +1,40 @@
+meta {
+  name: Editar meus dados (PUT /usuarios/me)
+  type: http
+  seq: 13
+}
+
+put {
+  url: {{baseUrl}}/api/usuarios/me
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "nome": "Pessoa Fictícia Editada",
+    "cpf": "529.982.247-25",
+    "senha": "Camera@2026",
+    "confirmacaoSenha": "Camera@2026"
+  }
+}
+
+tests {
+  test("retorna HTTP 200 com nome atualizado e e-mail inalterado", function () {
+    expect(res.getStatus()).to.equal(200);
+    expect(res.getBody().data.usuario.nome).to.equal("Pessoa Fictícia Editada");
+    expect(res.getBody().data.usuario.email).to.equal("pessoa.sprint1@example.test");
+  });
+}
+
+docs {
+  Todos os campos são obrigatórios (nome, cpf, senha, confirmacaoSenha). Mantém o mesmo CPF e senha para a coleção poder ser executada de novo.
+}

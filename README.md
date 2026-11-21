@@ -1,28 +1,38 @@
-# Solutec — Sprint 1
+# Solutec — Sprint 2
 
-Plataforma acadêmica de comércio eletrônico voltada a câmeras de segurança, monitoramento e produtos relacionados. Esta entrega implementa somente a primeira sprint: cadastro de usuário, interface institucional inicial, testes de API e análise estatística demonstrativa.
+Plataforma acadêmica da **Solutec**, loja de segurança eletrônica (câmeras, alarmes, controle de acesso e monitoramento). A Sprint 2 entrega autenticação JWT, edição do próprio usuário, quatro CRUDs completos (categorias, produtos, endereços e pedidos), catálogo público, configuração de agentes de IA e a documentação de persona, decisões e defesa técnica.
 
-> Os produtos, CPFs de teste e dados estatísticos deste repositório são fictícios e usados exclusivamente para demonstração. O projeto não apresenta preços, fornecedores, resultados comerciais ou identidade visual oficial da empresa.
+> Os produtos, preços, CPFs de teste e dados estatísticos deste repositório são **fictícios** e usados só para demonstração. O projeto não apresenta resultados comerciais nem a identidade visual oficial da empresa.
 
-## Entregas desta sprint
+## Escopo entregue
 
-- API REST com `GET /api/health` e `POST /api/usuarios/cadastro`.
-- Validação com Zod de nome, e-mail, CPF e força da senha.
-- CPF com algoritmo dos dígitos verificadores, rejeição de sequências repetidas e normalização.
-- Senha protegida exclusivamente com bcrypt (12 rounds por padrão).
-- Verificação de e-mail/CPF duplicado, incluindo proteção por índices únicos no MySQL.
-- Arquitetura modular com entidade de domínio encapsulada, serviço, controller e repositório.
-- Frontend React responsivo com home, cadastro integrado à API, produtos futuros e login visual não funcional.
-- Coleção Bruno com oito cenários e ambiente local.
-- Testes unitários das validações e regras de cadastro.
-- Análise estatística com dados 100% simulados, CSV e gráficos SVG acessíveis.
+**Backend (API REST)**
+- `POST /api/auth/login`: JWT HS256 (`sub` = id do usuário, validade `JWT_EXPIRES_IN`), bcrypt, regex de e-mail e o mesmo 401 genérico para e-mail inexistente ou senha errada.
+- `POST /api/usuarios/cadastro`, `GET /api/usuarios/me` e `PUT /api/usuarios/me`: edição só do próprio usuário, com todos os campos obrigatórios, CPF e senha forte validados; o e-mail não pode ser alterado.
+- CRUDs autenticados e paginados de `categorias`, `produtos`, `enderecos` e `pedidos` (`GET /`, `GET /:id`, `POST /`, `PUT /:id`, `DELETE /:id`), com 404, ownership, 409 para vínculos e 422 para regras de negócio.
+- `GET /api/catalogo`: vitrine pública, somente leitura, com os produtos ativos.
+- POO: `Entidade` e `CrudService` abstratas, `IRepositorio<T>`, tabela de transições de status, exceções customizadas e composição em `container.ts`.
+- Seed com 4 categorias, os 8 produtos da Solutec e um usuário de demonstração.
+
+**Frontend (React)**
+- Login real, cadastro com confirmação de senha, `AuthContext` com o nome do usuário no cabeçalho e rotas `/app/*` protegidas.
+- Minha conta (`/app/conta`) com e-mail somente leitura.
+- Listagem paginada e formulário separado para cada CRUD, com exclusão confirmada e validação no cliente.
+- Catálogo público em `/produtos`.
+- Componentes genéricos (`DataTable<T>`, `Pagination`, `FormField`, `Button`, `ConfirmDialog`, `Alert`, `PageHeader`, `ProtectedRoute`) e hooks `usePaginatedList<T>` e `useCrud<T>`.
+
+**Qualidade e documentação**
+- 119 testes (Vitest), sem banco: unitários e um teste de contrato HTTP (`backend/tests/http.contrato.test.ts`).
+- Coleção Bruno com 40 requisições.
+- `AGENTS.md`, 3 skills em `.claude/skills/` e bloqueio de `.env` em `.claude/settings.json`.
+- Em `docs/`: análise estatística com métricas de negócio, persona, decisões, defesa técnica e cobertura da rubrica.
 
 ## Tecnologias
 
 | Camada | Tecnologias |
 |---|---|
 | Frontend | React 18, Vite, TypeScript strict, React Router, Axios, CSS Modules |
-| Backend | Node.js, Express 5, TypeScript strict, Prisma ORM, MySQL, Zod, bcrypt |
+| Backend | Node.js 20+, Express 5, TypeScript strict, Prisma ORM, MySQL, Zod, bcrypt, jsonwebtoken |
 | Testes | Vitest e Bruno API Client |
 
 ## Estrutura
@@ -30,13 +40,16 @@ Plataforma acadêmica de comércio eletrônico voltada a câmeras de segurança,
 ```text
 solutec/
 ├── backend/
-│   ├── prisma/          # schema e migração inicial
-│   ├── src/             # config, entidade, erros, repositório, serviço, controller, rotas
-│   └── tests/           # testes unitários
+│   ├── prisma/          # schema, migrations versionadas e seed.ts
+│   ├── src/             # config, entities, repositories, services, controllers, routes, middlewares, errors, validators, types, container.ts
+│   └── tests/           # testes unitários + helpers (repositório em memória)
 ├── frontend/
-│   └── src/             # componentes, páginas, hook, rotas, serviços, tipos e estilos
+│   ├── public/img/produtos/   # imagens dos produtos (ver LEIAME.md) + placeholder.svg
+│   └── src/             # components, contexts, hooks, pages/<recurso>, routes, services, types, utils, styles
 ├── bruno/               # coleção HTTP e ambiente local
-├── docs/                # análise, base simulada e gráficos
+├── docs/                # análise, persona, decisões, defesa técnica, cobertura da rubrica
+├── .claude/             # skills do projeto e permissões (bloqueio de .env)
+├── AGENTS.md            # guia e guardrails para agentes de código
 ├── .env.example
 └── package.json         # workspaces e comandos do monorepositório
 ```
@@ -44,19 +57,19 @@ solutec/
 ## Pré-requisitos
 
 - Node.js 20 ou superior e npm 10 ou superior.
-- MySQL 8 disponível em `localhost:3306` (ou outra URL configurada).
+- MySQL 8 em `localhost:3306` (por exemplo, o do **XAMPP**).
 - Bruno Desktop ou Bruno CLI para executar a coleção HTTP.
 
 ## Instalação e configuração
 
-No PowerShell, a partir de `C:\projetos\solutec`:
+No PowerShell, a partir da pasta do projeto:
 
 ```powershell
 npm install
 Copy-Item .env.example backend/.env
 ```
 
-Crie um banco e um usuário MySQL locais. Exemplo a ser executado em um cliente MySQL com uma conta administrativa; escolha uma senha própria e repita-a apenas no `DATABASE_URL` de `backend/.env`:
+Crie o banco e um usuário MySQL locais (no phpMyAdmin do XAMPP ou em outro cliente, com uma conta administrativa). Escolha uma senha própria:
 
 ```sql
 CREATE DATABASE solutec CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -67,95 +80,122 @@ FLUSH PRIVILEGES;
 
 Edite `backend/.env`:
 
-```dotenv
-DATABASE_URL="mysql://solutec_app:uma_senha_local_forte@localhost:3306/solutec"
+| Variável | Obrigatória | Exemplo / padrão | Descrição |
+|---|---|---|---|
+| `DATABASE_URL` | sim | `mysql://solutec_app:uma_senha_local_forte@localhost:3306/solutec` | Conexão MySQL |
+| `JWT_SECRET` | sim | (gere um valor próprio) | Segredo do JWT, **mínimo de 32 caracteres** |
+| `JWT_EXPIRES_IN` | não | `2h` | Validade do token: segundos (`3600`) ou `s/m/h/d` (`30m`, `2h`, `7d`) |
+| `PORT` | não | `3000` | Porta da API |
+| `FRONTEND_URL` | não | `http://localhost:5173` | Origem liberada no CORS |
+| `BCRYPT_ROUNDS` | não | `12` | Custo do bcrypt (10 a 14) |
+| `NODE_ENV` | não | `development` | Ambiente |
+
+Para gerar um `JWT_SECRET`:
+
+```powershell
+node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"
 ```
 
-O valor presente em `.env.example` é apenas um marcador local e não é uma credencial válida para produção.
+Os valores de `.env.example` são apenas marcadores. Opcionalmente, crie `frontend/.env` com `VITE_API_URL` se a API não estiver em `http://localhost:3000/api`.
 
-Gere o Prisma Client e aplique a migração versionada:
+Gere o Prisma Client, aplique as migrations versionadas e popule o banco:
 
 ```powershell
 npm run prisma:generate -w backend
 npm run prisma:deploy -w backend
+npm run prisma:seed -w backend
 ```
 
-## Execução
+O seed é idempotente (pode rodar mais de uma vez) e cria:
+- as categorias **Câmeras**, **Alarmes**, **Controle de Acesso** e **Monitoramento**;
+- os **8 produtos** da Solutec, com preço, estoque fictício e `imagemUrl` em `/img/produtos/…`;
+- o **usuário de demonstração**, com o endereço "Loja Centro".
 
-Para iniciar frontend e backend juntos:
+### Usuário de demonstração (fictício)
+
+| Campo | Valor |
+|---|---|
+| E-mail | `demo@solutec.test` |
+| Senha | `Solutec@2026` |
+| CPF | `111.444.777-35` |
+
+## Execução
 
 ```powershell
 npm run dev
 ```
 
-- Frontend: `http://localhost:5173`
+- Frontend: `http://localhost:5173` (catálogo em `/produtos`, painel em `/app`)
 - API: `http://localhost:3000`
 - Health check: `http://localhost:3000/api/health`
 
-Também é possível iniciar separadamente:
-
-```powershell
-npm run dev -w backend
-npm run dev -w frontend
-```
+Também é possível iniciar separadamente: `npm run dev -w backend` e `npm run dev -w frontend`.
 
 ## Verificações
 
 ```powershell
-npm run test
+npm run prisma:generate -w backend   # necessário antes do typecheck
 npm run typecheck
+npm test
 npm run build
 ```
 
-Os testes unitários não dependem de um banco ativo. A validação manual/Bruno da persistência exige MySQL configurado e a migração aplicada.
+Os testes unitários não dependem de banco nem de `.env`: as variáveis de teste estão em `backend/vitest.config.ts`, e os serviços são testados com repositórios em memória.
 
 ## Coleção Bruno
 
-1. Abra o Bruno.
-2. Escolha **Open Collection**.
-3. Selecione a pasta `C:\projetos\solutec\bruno`.
-4. Selecione o ambiente **local**.
-5. Inicie a API e execute as requisições pela numeração.
+1. Abra o Bruno → **Open Collection** → selecione a pasta `bruno`.
+2. Selecione o ambiente **local**.
+3. Inicie a API e execute as requisições pela numeração (ou `bru run bruno --env local --sequential`).
 
-As requisições `01` e `03` a `06` não dependem de estado prévio. A requisição `02` cria a pessoa fictícia base. As requisições `07` (e-mail duplicado) e `08` (CPF duplicado) dependem do sucesso da `02`. Em uma segunda execução completa, a `02` retornará `409`; para repetir o cenário de `201`, remova somente esse registro do banco de desenvolvimento ou recrie o banco local. Essa dependência também está documentada dentro dos arquivos `.bru`.
+| Faixa | Conteúdo |
+|---|---|
+| 01–08 | Health check e cadastro (válido, inválidos, duplicados) |
+| 09–11 | Login: o 09 **salva o token** na variável de ambiente `token` pelo script pós-resposta; 10 e 11 mostram o mesmo 401 |
+| 12–15 | `GET/PUT /usuarios/me`, bloqueio de e-mail e acesso sem token |
+| 16–24 | Categorias e produtos: listar paginado, criar, editar, 400 e 404 |
+| 25–28 | Endereços: listar só os próprios, criar, editar, 404 |
+| 29–33 | Pedidos: listar, criar (preço congelado e total), editar itens, transição inválida (422), 404 |
+| 34–39 | Exclusões: 409 de categoria com produto e de produto em pedido, depois exclusões com 204 |
+| 40 | Catálogo público (sem token) |
 
-Pela CLI do Bruno, quando instalada:
-
-```powershell
-bru run bruno --env local --sequential
-```
+O 02 cria a pessoa fictícia usada no login 09. Numa segunda execução, o 02 responde `409` (o esperado) e o restante continua funcionando: o 13 mantém CPF e senha, e os nomes de categoria levam um sufixo único gerado pelo pré-script.
 
 ## Contrato resumido da API
 
-### `POST /api/usuarios/cadastro`
+Respostas de sucesso: `{ success: true, data }`. Listagens: `{ success: true, data: [...], meta: { page, limit, total, totalPages } }`. Erros: `{ success: false, error: { code, message, fields? } }`.
 
-```json
-{
-  "nome": "Pessoa Fictícia de Teste",
-  "email": "pessoa.sprint1@example.test",
-  "senha": "Camera@2026",
-  "cpf": "529.982.247-25"
-}
-```
+| Método e rota | Auth | Descrição |
+|---|---|---|
+| `GET /api/health` | — | Status da API |
+| `POST /api/usuarios/cadastro` | — | Cadastro (`nome`, `email`, `senha`, `cpf`) |
+| `POST /api/auth/login` | — | `{ email, senha }` → `data: { token, usuario }` |
+| `GET /api/usuarios/me` | Bearer | Dados do usuário logado |
+| `PUT /api/usuarios/me` | Bearer | `{ nome, cpf, senha, confirmacaoSenha }` (enviar `email` → 400) |
+| `GET/POST /api/categorias` · `GET/PUT/DELETE /api/categorias/:id` | Bearer | CRUD de categorias |
+| `GET/POST /api/produtos` · `GET/PUT/DELETE /api/produtos/:id` | Bearer | CRUD de produtos |
+| `GET/POST /api/enderecos` · `GET/PUT/DELETE /api/enderecos/:id` | Bearer | CRUD dos endereços do usuário |
+| `GET/POST /api/pedidos` · `GET/PUT/DELETE /api/pedidos/:id` | Bearer | CRUD dos pedidos do usuário |
+| `GET /api/catalogo` | — | Produtos ativos (vitrine) |
 
-- `201`: cadastro persistido; resposta contém somente dados públicos.
-- `400`: dados inválidos; `error.fields` associa mensagens aos campos.
-- `409`: e-mail ou CPF já cadastrado.
-- `500`: mensagem segura e genérica, sem detalhes do banco.
+Códigos usados: `200`, `201`, `204`, `400` (validação), `401` (sem token, token inválido ou credenciais incorretas), `404` (inexistente ou de outro dono), `409` (duplicado ou vínculo), `422` (regra de negócio) e `500` (mensagem genérica).
 
 ## Segurança
 
-- O hash bcrypt nunca é retornado pela API.
-- O CPF é armazenado apenas com 11 dígitos.
-- O e-mail é normalizado para letras minúsculas.
-- O Express limita o corpo JSON e desativa o cabeçalho `x-powered-by`.
-- Erros internos são registrados no servidor, mas não expostos ao cliente.
-- `.env`, dependências, builds, logs e temporários são ignorados pelo Git.
+- Senhas só com bcrypt. O hash nunca é retornado e nem sai da entidade `Usuario`.
+- JWT HS256 com algoritmo fixado na verificação, validade configurável e segredo obrigatório com no mínimo 32 caracteres.
+- Ownership no `WHERE` do repositório: recurso de outro usuário responde 404.
+- Schemas Zod `.strict()`: o cliente não consegue enviar `usuarioId`, preço do item nem total.
+- Erros internos e do banco são registrados no servidor, mas não expostos ao cliente.
+- `.env` ignorado pelo Git e bloqueado para agentes (`.claude/settings.json` + `AGENTS.md`).
 
-## Fora do escopo da Sprint 1
+## Documentação
 
-Login funcional, JWT, rotas protegidas, edição de usuários, CRUDs de produtos/categorias/endereços/pedidos, carrinho, checkout, pagamentos, Docker Compose, Nginx e agentes/skills serão tratados em sprints futuras. A separação atual entre domínio, serviço, repositório, API e interface foi mantida para permitir essa evolução sem acoplamento desnecessário.
-
-## Análise acadêmica
-
-A análise descritiva está em [`docs/analise-estatistica.md`](docs/analise-estatistica.md). Os gráficos são SVGs versionáveis e incluem descrições de acessibilidade.
+| Documento | Conteúdo |
+|---|---|
+| [`docs/analise-estatistica.md`](docs/analise-estatistica.md) | 5 gráficos SVG acessíveis + métricas de negócio (receita, ticket médio, participação, variação mensal) |
+| [`docs/PERSONA.md`](docs/PERSONA.md) | Persona e tabela dor → funcionalidade |
+| [`docs/DECISOES.md`](docs/DECISOES.md) | Decisões de regra de negócio |
+| [`docs/DEFESA-TECNICA.md`](docs/DEFESA-TECNICA.md) | Roteiro de apresentação, diagramas e perguntas da banca |
+| [`docs/COBERTURA-RUBRICA.md`](docs/COBERTURA-RUBRICA.md) | Tabela de cobertura da rubrica e "como testar" |
+| [`AGENTS.md`](AGENTS.md) | Convenções e guardrails para agentes de código |

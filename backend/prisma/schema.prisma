@@ -8,13 +8,107 @@ datasource db {
 }
 
 model Usuario {
-  id        String   @id @default(cuid())
-  nome      String   @db.VarChar(120)
-  email     String   @unique @db.VarChar(254)
-  cpf       String   @unique @db.Char(11)
-  senhaHash String   @map("senha_hash") @db.VarChar(60)
-  criadoEm  DateTime @default(now()) @map("criado_em")
+  id           String   @id @default(cuid())
+  nome         String   @db.VarChar(120)
+  email        String   @unique @db.VarChar(254)
+  cpf          String   @unique @db.Char(11)
+  senhaHash    String   @map("senha_hash") @db.VarChar(60)
+  criadoEm     DateTime @default(now()) @map("criado_em")
   atualizadoEm DateTime @updatedAt @map("atualizado_em")
 
+  enderecos Endereco[]
+  pedidos   Pedido[]
+
   @@map("usuarios")
+}
+
+model Categoria {
+  id           String   @id @default(cuid())
+  nome         String   @unique @db.VarChar(80)
+  descricao    String?  @db.VarChar(255)
+  criadoEm     DateTime @default(now()) @map("criado_em")
+  atualizadoEm DateTime @updatedAt @map("atualizado_em")
+
+  produtos Produto[]
+
+  @@map("categorias")
+}
+
+model Produto {
+  id           String   @id @default(cuid())
+  nome         String   @db.VarChar(120)
+  descricao    String   @db.Text
+  preco        Decimal  @db.Decimal(10, 2)
+  estoque      Int      @default(0)
+  imagemUrl    String?  @map("imagem_url") @db.VarChar(255)
+  ativo        Boolean  @default(true)
+  categoriaId  String   @map("categoria_id")
+  criadoEm     DateTime @default(now()) @map("criado_em")
+  atualizadoEm DateTime @updatedAt @map("atualizado_em")
+
+  categoria   Categoria    @relation(fields: [categoriaId], references: [id], onDelete: Restrict)
+  itensPedido ItemPedido[]
+
+  @@index([categoriaId])
+  @@map("produtos")
+}
+
+model Endereco {
+  id           String   @id @default(cuid())
+  usuarioId    String   @map("usuario_id")
+  apelido      String   @db.VarChar(60)
+  cep          String   @db.Char(8)
+  logradouro   String   @db.VarChar(150)
+  numero       String   @db.VarChar(10)
+  complemento  String?  @db.VarChar(80)
+  bairro       String   @db.VarChar(80)
+  cidade       String   @db.VarChar(80)
+  uf           String   @db.Char(2)
+  criadoEm     DateTime @default(now()) @map("criado_em")
+  atualizadoEm DateTime @updatedAt @map("atualizado_em")
+
+  usuario Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Restrict)
+  pedidos Pedido[]
+
+  @@index([usuarioId])
+  @@map("enderecos")
+}
+
+enum StatusPedido {
+  PENDENTE
+  PAGO
+  ENVIADO
+  CANCELADO
+}
+
+model Pedido {
+  id           String       @id @default(cuid())
+  usuarioId    String       @map("usuario_id")
+  enderecoId   String       @map("endereco_id")
+  status       StatusPedido @default(PENDENTE)
+  criadoEm     DateTime     @default(now()) @map("criado_em")
+  atualizadoEm DateTime     @updatedAt @map("atualizado_em")
+
+  usuario  Usuario      @relation(fields: [usuarioId], references: [id], onDelete: Restrict)
+  endereco Endereco     @relation(fields: [enderecoId], references: [id], onDelete: Restrict)
+  itens    ItemPedido[]
+
+  @@index([usuarioId])
+  @@index([enderecoId])
+  @@map("pedidos")
+}
+
+model ItemPedido {
+  id            String  @id @default(cuid())
+  pedidoId      String  @map("pedido_id")
+  produtoId     String  @map("produto_id")
+  quantidade    Int
+  precoUnitario Decimal @map("preco_unitario") @db.Decimal(10, 2)
+
+  pedido  Pedido  @relation(fields: [pedidoId], references: [id], onDelete: Cascade)
+  produto Produto @relation(fields: [produtoId], references: [id], onDelete: Restrict)
+
+  @@unique([pedidoId, produtoId])
+  @@index([produtoId])
+  @@map("itens_pedido")
 }

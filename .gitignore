@@ -8,6 +8,10 @@ node_modules/
 backend/.env
 frontend/.env
 
+# Artefatos que o tsc geraria a partir do vite.config.ts (o projeto é só TypeScript)
+frontend/vite.config.js
+frontend/vite.config.d.ts
+
 # Builds e cobertura
 dist/
 build/

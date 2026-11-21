@@ -1,0 +1,27 @@
+meta {
+  name: Categorias — listar paginado
+  type: http
+  seq: 16
+}
+
+get {
+  url: {{baseUrl}}/api/categorias?page=1&limit=10
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("retorna HTTP 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+  test("retorna data + meta de paginação", function () {
+    const body = res.getBody();
+    expect(body.data).to.be.an("array");
+    expect(body.meta).to.include.keys("page", "limit", "total", "totalPages");
+    expect(body.meta.limit).to.equal(10);
+  });
+}

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="360" viewBox="0 0 480 360" role="img" aria-labelledby="t">
+  <title id="t">Imagem do produto indisponível</title>
+  <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b2747"/><stop offset="1" stop-color="#071426"/></linearGradient></defs>
+  <rect width="480" height="360" fill="url(#g)"/>
+  <g fill="none" stroke="#35a6ff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" opacity=".85">
+    <path d="M240 92 300 115v41c0 37-25 62-60 73-35-11-60-36-60-73v-41l60-23Z"/>
+    <circle cx="240" cy="152" r="18"/>
+  </g>
+  <text x="240" y="282" fill="#91a6be" font-family="Arial, sans-serif" font-size="18" text-anchor="middle">Imagem em breve</text>
+</svg>

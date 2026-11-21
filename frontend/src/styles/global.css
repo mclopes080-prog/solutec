@@ -10,3 +10,13 @@ button, input { font: inherit; }
 .buttonGhost { border: 1px solid rgba(142,183,220,.27); background: rgba(255,255,255,.035); color: #dcecff; }
 ::selection { background: #168de9; color: white; }
 @media (max-width: 560px) { .container { width: min(100% - 1.5rem, 1180px); } }
+
+/* Superfícies da área autenticada */
+.painel { padding: clamp(1.1rem, 3vw, 1.75rem); border: 1px solid #dce6ef; border-radius: 1rem; background: #fbfdff; box-shadow: 0 20px 50px rgba(0,0,0,.22); color: #17324d; }
+.formGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.1rem 1rem; }
+.formGrid .span2 { grid-column: 1 / -1; }
+.formAcoes { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .6rem; margin-top: 1.5rem; padding-top: 1.2rem; border-top: 1px solid #e3eaf1; }
+.carregando { padding: 3rem 1rem; color: #92a7bf; text-align: center; }
+.visuallyHidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+button, input, select, textarea { font: inherit; }
+@media (max-width: 640px) { .formGrid { grid-template-columns: 1fr; } }

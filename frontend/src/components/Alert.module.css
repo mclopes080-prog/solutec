@@ -1,0 +1,4 @@
+.alert { margin-bottom: 1rem; padding: .8rem 1rem; border: 1px solid; border-radius: .55rem; font-size: .8rem; line-height: 1.5; }
+.erro { border-color: #f0c7c7; background: #fff1f1; color: #a62f2f; }
+.sucesso { border-color: #b8e5d3; background: #edf9f5; color: #147658; }
+.info { border-color: #c7dcf0; background: #eef6ff; color: #1d5487; }

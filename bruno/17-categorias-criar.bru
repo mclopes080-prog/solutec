@@ -1,0 +1,49 @@
+meta {
+  name: Categorias — criar
+  type: http
+  seq: 17
+}
+
+post {
+  url: {{baseUrl}}/api/categorias
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "nome": "Categoria Bruno {{sufixo}}",
+    "descricao": "Criada pela coleção Bruno."
+  }
+}
+
+script:pre-request {
+  bru.setVar("sufixo", Date.now());
+}
+
+script:post-response {
+  if (res.getStatus() === 201) {
+    bru.setVar("categoriaId", res.getBody().data.id);
+  }
+}
+
+tests {
+  test("retorna HTTP 201", function () {
+    expect(res.getStatus()).to.equal(201);
+  });
+  test("devolve a categoria criada", function () {
+    expect(res.getBody().data.nome).to.contain("Categoria Bruno");
+  });
+}
+
+docs {
+  Nome único: o pré-script gera um sufixo para a coleção poder rodar várias vezes. Salva `categoriaId`.
+}

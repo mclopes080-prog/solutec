@@ -1,0 +1,27 @@
+meta {
+  name: Login com e-mail inexistente
+  type: http
+  seq: 11
+}
+
+post {
+  url: {{baseUrl}}/api/auth/login
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  { "email": "ninguem@example.test", "senha": "Camera@2026" }
+}
+
+tests {
+  test("retorna HTTP 401 com a mesma mensagem da senha errada", function () {
+    expect(res.getStatus()).to.equal(401);
+    expect(res.getBody().error.code).to.equal("UNAUTHORIZED");
+    expect(res.getBody().error.message).to.equal("E-mail ou senha incorretos.");
+  });
+}

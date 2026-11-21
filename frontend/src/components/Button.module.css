@@ -1,0 +1,11 @@
+.button { min-height: 2.75rem; display: inline-flex; align-items: center; justify-content: center; gap: .55rem; padding: .65rem 1.1rem; border: 1px solid transparent; border-radius: .6rem; font: inherit; font-size: .82rem; font-weight: 750; text-decoration: none; cursor: pointer; transition: transform .15s, box-shadow .15s, background .15s, opacity .15s; }
+.button:hover:not(:disabled) { transform: translateY(-1px); }
+.button:focus-visible { outline: 3px solid rgba(53,166,255,.55); outline-offset: 2px; }
+.button:disabled { cursor: not-allowed; opacity: .6; }
+.primary { background: linear-gradient(135deg,#087fea,#159aff); box-shadow: 0 8px 20px rgba(9,129,234,.2); color: #fff; }
+.ghost { border-color: rgba(142,183,220,.35); background: rgba(255,255,255,.04); color: #dcecff; }
+.light { border-color: #d5e0ea; background: #fff; color: #17324d; }
+.danger { background: #c93636; color: #fff; }
+.spinner { width: .85rem; height: .85rem; display: inline-block; border: 2px solid rgba(255,255,255,.4); border-top-color: currentColor; border-radius: 50%; animation: girar .7s linear infinite; }
+@keyframes girar { to { transform: rotate(360deg); } }
+.pequeno { min-height: 2.1rem; padding: .35rem .7rem; font-size: .74rem; border-radius: .5rem; }

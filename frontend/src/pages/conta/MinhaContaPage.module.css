@@ -1,0 +1,5 @@
+.grid { display: grid; grid-template-columns: 1fr 260px; align-items: start; gap: 1.25rem; }
+.resumo { display: grid; justify-items: center; gap: .35rem; text-align: center; color: #5c6f84; font-size: .82rem; }
+.resumo strong { color: #0b2038; font-size: 1rem; }
+.avatar { width: 4rem; height: 4rem; display: grid; margin-bottom: .5rem; place-items: center; border-radius: 50%; background: linear-gradient(135deg,#087fea,#43a8ff); color: #fff; font-size: 1.6rem; font-weight: 800; }
+@media (max-width: 860px) { .grid { grid-template-columns: 1fr; } .resumo { order: -1; } }

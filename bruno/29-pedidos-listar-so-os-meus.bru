@@ -1,0 +1,21 @@
+meta {
+  name: Pedidos — listar (só os meus)
+  type: http
+  seq: 29
+}
+
+get {
+  url: {{baseUrl}}/api/pedidos?page=1&limit=10
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("retorna HTTP 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+}
