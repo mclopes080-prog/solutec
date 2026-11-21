@@ -36,7 +36,7 @@ A igualdade entre média e mediana indica que, neste conjunto pequeno e simulado
 
 ![Histograma das vendas mensais por categoria](grafico-histograma-vendas.svg)
 
-Para observar a distribuição sem agregar as categorias, foram usadas as 24 combinações de categoria e mês. A frequência é 3 observações com 1 unidade, 9 com 2 unidades, 7 com 3 unidades, 3 com 4 unidades e 2 com 5 unidades. A maior concentração está entre 2 e 3 unidades por categoria-mês, somando 16 das 24 observações (66,7%).
+Para observar a distribuição sem agregar as categorias, foram usadas as 24 combinações de categoria e mês. A frequência é 3 observações com 1 unidade, 10 com 2 unidades, 6 com 3 unidades, 3 com 4 unidades e 2 com 5 unidades. A maior concentração está entre 2 e 3 unidades por categoria-mês, somando 16 das 24 observações (66,7%).
 
 ## Dispersão e regressão linear
 

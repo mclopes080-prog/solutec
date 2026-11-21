@@ -1,0 +1,11 @@
+.svg { display: block; width: 100%; height: auto; }
+.grade { stroke: #e6edf3; stroke-width: 1; }
+.base { stroke: #9fb1c3; stroke-width: 1; }
+.rotulo { fill: #5b6f84; font-size: 11px; }
+.titulo { fill: #4f6378; font-size: 11px; font-weight: 700; }
+.valor { fill: #0c2038; font-size: 11px; font-weight: 700; }
+.legenda { display: flex; flex-wrap: wrap; gap: .9rem; margin-top: .3rem; color: #4f6378; font-size: .75rem; }
+.legenda span { display: inline-flex; align-items: center; gap: .35rem; }
+.legenda i { width: .7rem; height: .7rem; border-radius: .15rem; }
+.barra, .ponto { transition: opacity .15s; }
+.barra:hover, .ponto:hover { opacity: .75; }

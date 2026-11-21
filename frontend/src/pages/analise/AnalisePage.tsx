@@ -1,20 +1,30 @@
 import { PageHeader } from "../../components/PageHeader";
+import { GraficoBarras } from "../../components/graficos/GraficoBarras";
+import { GraficoColunasAgrupadas } from "../../components/graficos/GraficoColunasAgrupadas";
+import { GraficoDispersao } from "../../components/graficos/GraficoDispersao";
+import { GraficoLinha } from "../../components/graficos/GraficoLinha";
+import { Histograma } from "../../components/graficos/Histograma";
 import styles from "./AnalisePage.module.css";
-import { VENDAS, calcularMensal, calcularPorCategoria, mediana, regressaoLinear, type LinhaMensal } from "./dadosAnalise";
+import type { ReactNode } from "react";
+import { CATEGORIAS, VENDAS, calcularMensal, calcularPorCategoria, mediana, regressaoLinear, type LinhaMensal } from "./dadosAnalise";
 
 const brl = (v: number): string => v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 const pct = (v: number): string => `${(v * 100).toLocaleString("pt-BR", { minimumFractionDigits: 1, maximumFractionDigits: 1 })}%`;
 const dec = (v: number): string => v.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-interface Grafico { arquivo: string; tipo: string; titulo: string; legenda: string }
+const ABREV: Record<string, string> = { "Câmeras IP": "Câm. IP", "Câmeras analógicas": "Analógicas", Gravadores: "Gravadores", Acessórios: "Acessórios" };
 
-const GRAFICOS: readonly Grafico[] = [
-  { arquivo: "grafico-vendas-categoria.svg", tipo: "Barras", titulo: "Vendas por categoria", legenda: "Câmeras IP lideram em unidades (38,1%). Apoia a decisão de quanto estocar de cada categoria." },
-  { arquivo: "grafico-evolucao-mensal.svg", tipo: "Série temporal", titulo: "Evolução mensal das vendas", legenda: "Totais de 8 a 13 unidades por mês, com pico em abril. Mostra os meses de maior procura." },
-  { arquivo: "grafico-histograma-vendas.svg", tipo: "Histograma", titulo: "Distribuição das vendas por categoria e mês", legenda: "16 das 24 observações ficam entre 2 e 3 unidades: é o volume típico de cada categoria por mês." },
-  { arquivo: "grafico-dispersao-regressao.svg", tipo: "Dispersão + regressão", titulo: "Tendência de crescimento", legenda: "A reta de regressão indica a tendência das vendas ao longo do semestre." },
-  { arquivo: "grafico-receita-categoria.svg", tipo: "Colunas agrupadas", titulo: "Unidades × receita por categoria", legenda: "Gravadores são 19% das unidades, mas quase 40% da receita: não podem faltar no estoque." }
-];
+/** Componente exclusivo da página: moldura de um gráfico com tipo, título e interpretação. */
+function CartaoGrafico({ tipo, titulo, legenda, children }: { tipo: string; titulo: string; legenda: string; children: ReactNode }) {
+  return (
+    <figure className={styles.grafico}>
+      <span className={styles.tipo}>{tipo}</span>
+      <h2>{titulo}</h2>
+      {children}
+      <figcaption>{legenda}</figcaption>
+    </figure>
+  );
+}
 
 /** Componente exclusivo da página: um indicador. */
 function Indicador({ rotulo, valor, detalhe }: { rotulo: string; valor: string; detalhe: string }) {
@@ -41,6 +51,7 @@ export function AnalisePage() {
   const totalUnidades = totais.reduce((a, b) => a + b, 0);
   const receitaTotal = mensal.reduce((a, m) => a + m.receita, 0);
   const { a, b, r2 } = regressaoLinear(totais);
+  const observacoes = VENDAS.flatMap((v) => CATEGORIAS.map((c) => v.unidades[c]));
 
   return (
     <>
@@ -55,14 +66,25 @@ export function AnalisePage() {
       </div>
 
       <div className={styles.graficos}>
-        {GRAFICOS.map((g) => (
-          <figure key={g.arquivo} className={styles.grafico}>
-            <span className={styles.tipo}>{g.tipo}</span>
-            <h2>{g.titulo}</h2>
-            <img src={`/analise/${g.arquivo}`} alt={g.titulo} loading="lazy" />
-            <figcaption>{g.legenda}</figcaption>
-          </figure>
-        ))}
+        <CartaoGrafico tipo="Barras" titulo="Vendas por categoria" legenda={`Câmeras IP lideram com ${pct(categorias[0]?.pctUnidades ?? 0)} das unidades. Apoia a decisão de quanto estocar de cada categoria.`}>
+          <GraficoBarras dados={categorias} rotulo={(c) => ABREV[c.categoria] ?? c.categoria} valor={(c) => c.unidades} tituloY="Unidades" descricao="Unidades vendidas por categoria no semestre" />
+        </CartaoGrafico>
+
+        <CartaoGrafico tipo="Série temporal" titulo="Evolução mensal das vendas" legenda={`Pico em abril e média de ${dec(totalUnidades / totais.length)} unidades por mês. Mostra os meses de maior procura.`}>
+          <GraficoLinha pontos={mensal.map((m) => ({ rotulo: m.mes.slice(0, 3), valor: m.unidades }))} linhaMedia={totalUnidades / totais.length} formatar={(v) => (Number.isInteger(v) ? String(v) : dec(v))} tituloY="Unidades" descricao="Total de unidades vendidas por mês" />
+        </CartaoGrafico>
+
+        <CartaoGrafico tipo="Histograma" titulo="Distribuição das vendas por categoria e mês" legenda="Cada observação é uma categoria em um mês (24 no total). A maioria fica entre 2 e 3 unidades: é o volume típico.">
+          <Histograma valores={observacoes} tituloX="Unidades vendidas (categoria × mês)" descricao="Frequência de unidades vendidas por categoria em cada mês" />
+        </CartaoGrafico>
+
+        <CartaoGrafico tipo="Dispersão + regressão" titulo="Tendência de crescimento" legenda={`ŷ = ${dec(a)} + ${dec(b)}x: cerca de ${dec(b)} unidade a mais por mês. R² = ${dec(r2)}, ou seja, ${pct(r2)} da variação é explicada pela tendência.`}>
+          <GraficoDispersao pontos={mensal.map((m, i) => ({ x: i + 1, y: m.unidades, rotulo: m.mes }))} reta={{ a, b }} rotuloX={(x) => mensal[x - 1]?.mes.slice(0, 3) ?? String(x)} tituloX="Mês (x = 1 a 6)" tituloY="Unidades" descricao="Dispersão das vendas mensais com reta de regressão linear" />
+        </CartaoGrafico>
+
+        <CartaoGrafico tipo="Colunas agrupadas" titulo="Unidades × receita por categoria" legenda="Gravadores são 19% das unidades, mas quase 40% da receita: não podem faltar no estoque. Acessórios vendem, mas rendem pouco.">
+          <GraficoColunasAgrupadas dados={categorias} rotulo={(c) => ABREV[c.categoria] ?? c.categoria} formatar={(v) => `${Math.round(v * 100)}%`} series={[{ nome: "% das unidades", valor: (c) => c.pctUnidades }, { nome: "% da receita", valor: (c) => c.pctReceita }]} descricao="Participação de cada categoria nas unidades e na receita" />
+        </CartaoGrafico>
       </div>
 
       <h2 className={styles.secao}>Receita por categoria</h2>
