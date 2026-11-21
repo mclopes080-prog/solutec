@@ -7,6 +7,7 @@ const ITENS_MENU = [
   { para: "/app/categorias", rotulo: "Categorias", icone: "▤", fim: false },
   { para: "/app/enderecos", rotulo: "Endereços", icone: "⌂", fim: false },
   { para: "/app/pedidos", rotulo: "Pedidos", icone: "▣", fim: false },
+  { para: "/app/analise", rotulo: "Análise", icone: "▥", fim: false },
   { para: "/app/conta", rotulo: "Minha conta", icone: "◉", fim: false }
 ] as const;
 

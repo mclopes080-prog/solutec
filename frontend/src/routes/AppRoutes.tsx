@@ -3,6 +3,7 @@ import { Layout } from "../components/Layout";
 import { ProtectedRoute } from "../components/ProtectedRoute";
 import { AppLayout } from "../pages/app/AppLayout";
 import { PainelPage } from "../pages/PainelPage";
+import { AnalisePage } from "../pages/analise/AnalisePage";
 import { CadastroPage } from "../pages/CadastroPage";
 import { LoginPage } from "../pages/LoginPage";
 import { CatalogoPage } from "../pages/catalogo/CatalogoPage";
@@ -30,6 +31,7 @@ export function AppRoutes() {
         <Route path="/app" element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
           <Route index element={<PainelPage />} />
           <Route path="conta" element={<MinhaContaPage />} />
+          <Route path="analise" element={<AnalisePage />} />
 
           <Route path="produtos" element={<ProdutosListPage />} />
           <Route path="produtos/novo" element={<ProdutoFormPage />} />
