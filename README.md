@@ -23,7 +23,6 @@ Plataforma acadêmica da **Solutec**, loja de segurança eletrônica (câmeras, 
 
 **Qualidade e documentação**
 - 119 testes (Vitest), sem banco: unitários e um teste de contrato HTTP (`backend/tests/http.contrato.test.ts`).
-- Coleção Bruno com 40 requisições.
 - `AGENTS.md`, 3 skills em `.claude/skills/` e bloqueio de `.env` em `.claude/settings.json`.
 - Em `docs/`: análise estatística com métricas de negócio, persona, decisões, defesa técnica e cobertura da rubrica.
 
@@ -33,7 +32,7 @@ Plataforma acadêmica da **Solutec**, loja de segurança eletrônica (câmeras, 
 |---|---|
 | Frontend | React 18, Vite, TypeScript strict, React Router, Axios, CSS Modules |
 | Backend | Node.js 20+, Express 5, TypeScript strict, Prisma ORM, MySQL, Zod, bcrypt, jsonwebtoken |
-| Testes | Vitest e Bruno API Client |
+| Testes | Vitest (unitários e contrato HTTP sem banco) |
 
 ## Estrutura
 
@@ -46,7 +45,6 @@ solutec/
 ├── frontend/
 │   ├── public/img/produtos/   # imagens dos produtos (ver LEIAME.md) + placeholder.svg
 │   └── src/             # components, contexts, hooks, pages/<recurso>, routes, services, types, utils, styles
-├── bruno/               # coleção HTTP e ambiente local
 ├── docs/                # análise, persona, decisões, defesa técnica, cobertura da rubrica
 ├── .claude/             # skills do projeto e permissões (bloqueio de .env)
 ├── AGENTS.md            # guia e guardrails para agentes de código
@@ -58,7 +56,6 @@ solutec/
 
 - Node.js 20 ou superior e npm 10 ou superior.
 - MySQL 8 em `localhost:3306` (por exemplo, o do **XAMPP**).
-- Bruno Desktop ou Bruno CLI para executar a coleção HTTP.
 
 ## Instalação e configuração
 
@@ -141,25 +138,6 @@ npm run build
 ```
 
 Os testes unitários não dependem de banco nem de `.env`: as variáveis de teste estão em `backend/vitest.config.ts`, e os serviços são testados com repositórios em memória.
-
-## Coleção Bruno
-
-1. Abra o Bruno → **Open Collection** → selecione a pasta `bruno`.
-2. Selecione o ambiente **local**.
-3. Inicie a API e execute as requisições pela numeração (ou `bru run bruno --env local --sequential`).
-
-| Faixa | Conteúdo |
-|---|---|
-| 01–08 | Health check e cadastro (válido, inválidos, duplicados) |
-| 09–11 | Login: o 09 **salva o token** na variável de ambiente `token` pelo script pós-resposta; 10 e 11 mostram o mesmo 401 |
-| 12–15 | `GET/PUT /usuarios/me`, bloqueio de e-mail e acesso sem token |
-| 16–24 | Categorias e produtos: listar paginado, criar, editar, 400 e 404 |
-| 25–28 | Endereços: listar só os próprios, criar, editar, 404 |
-| 29–33 | Pedidos: listar, criar (preço congelado e total), editar itens, transição inválida (422), 404 |
-| 34–39 | Exclusões: 409 de categoria com produto e de produto em pedido, depois exclusões com 204 |
-| 40 | Catálogo público (sem token) |
-
-O 02 cria a pessoa fictícia usada no login 09. Numa segunda execução, o 02 responde `409` (o esperado) e o restante continua funcionando: o 13 mantém CPF e senha, e os nomes de categoria levam um sufixo único gerado pelo pré-script.
 
 ## Contrato resumido da API
 

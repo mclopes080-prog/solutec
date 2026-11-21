@@ -19,7 +19,7 @@ import {
 } from "./helpers/fabricas.js";
 
 const ana: ContextoRequisicao = { usuarioId: "usr_ana" };
-const bruno: ContextoRequisicao = { usuarioId: "usr_bruno" };
+const intruso: ContextoRequisicao = { usuarioId: "usr_intruso" };
 const pagina = { page: 1, limit: 10 };
 
 /**
@@ -118,10 +118,10 @@ describe("EnderecoService (ownership)", () => {
     const criado = await enderecos.criar(dadosEndereco(), ana);
     expect(criado.usuarioId).toBe("usr_ana");
 
-    await expect(enderecos.buscar(criado.id, bruno)).rejects.toBeInstanceOf(NotFoundError);
-    await expect(enderecos.atualizar(criado.id, dadosEndereco({ numero: "9" }), bruno)).rejects.toBeInstanceOf(NotFoundError);
-    await expect(enderecos.remover(criado.id, bruno)).rejects.toBeInstanceOf(NotFoundError);
-    expect((await enderecos.listar(pagina, bruno)).data).toHaveLength(0);
+    await expect(enderecos.buscar(criado.id, intruso)).rejects.toBeInstanceOf(NotFoundError);
+    await expect(enderecos.atualizar(criado.id, dadosEndereco({ numero: "9" }), intruso)).rejects.toBeInstanceOf(NotFoundError);
+    await expect(enderecos.remover(criado.id, intruso)).rejects.toBeInstanceOf(NotFoundError);
+    expect((await enderecos.listar(pagina, intruso)).data).toHaveLength(0);
     expect((await enderecos.listar(pagina, ana)).data).toHaveLength(1);
   });
 });
@@ -159,7 +159,7 @@ describe("PedidoService", () => {
       s.pedidos.criar({ enderecoId: s.endereco.id, itens: [{ produtoId: s.inativo.id ?? "", quantidade: 1 }] }, ana)
     ).rejects.toBeInstanceOf(BusinessRuleError);
     await expect(
-      s.pedidos.criar({ enderecoId: s.endereco.id, itens: [{ produtoId: s.camera.id ?? "", quantidade: 1 }] }, bruno)
+      s.pedidos.criar({ enderecoId: s.endereco.id, itens: [{ produtoId: s.camera.id ?? "", quantidade: 1 }] }, intruso)
     ).rejects.toBeInstanceOf(BusinessRuleError);
   });
 
@@ -176,6 +176,6 @@ describe("PedidoService", () => {
   it("pedido de outro usuário não aparece (404)", async () => {
     const s = await preparar();
     const pedido = await s.pedidos.criar({ enderecoId: s.endereco.id, itens: [{ produtoId: s.camera.id ?? "", quantidade: 1 }] }, ana);
-    await expect(s.pedidos.buscar(pedido.id, bruno)).rejects.toBeInstanceOf(NotFoundError);
+    await expect(s.pedidos.buscar(pedido.id, intruso)).rejects.toBeInstanceOf(NotFoundError);
   });
 });

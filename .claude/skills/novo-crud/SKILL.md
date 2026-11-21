@@ -1,6 +1,6 @@
 ---
 name: novo-crud
-description: Passo a passo para criar um recurso CRUD completo na Solutec (entidade → repositório → serviço → controller → rotas → testes → Bruno → telas), seguindo as camadas e a POO do projeto. Use quando pedirem um novo cadastro/entidade/recurso.
+description: Passo a passo para criar um recurso CRUD completo na Solutec (entidade → repositório → serviço → controller → rotas → testes → telas), seguindo as camadas e a POO do projeto. Use quando pedirem um novo cadastro/entidade/recurso.
 ---
 
 # Novo CRUD na Solutec
@@ -57,18 +57,16 @@ Use `Categoria` como modelo mais simples e `Endereco` como modelo de recurso **c
 ## 7. Testes — `backend/tests/`
 - Entidade: construtor válido, cada validação, setters com regra.
 - Serviço: 404 em editar/excluir inexistente, conflitos, ownership (escopo enviado ao repositório). Use repositório em memória (`tests/helpers/RepositorioMemoria.ts`).
+- Adicione os casos HTTP (401, 201, paginado, 404, 204) em `tests/http.contrato.test.ts`.
 - Rode `npm run prisma:generate -w backend && npm run typecheck && npm test && npm run build`.
 
-## 8. Bruno — `bruno/`
-Arquivos numerados em sequência: listar (paginado), criar (salva `recursoId` com `bru.setVar` no `script:post-response`), editar, 404 e deletar. Todos com `auth: bearer` / `token: {{token}}`.
-
-## 9. Frontend
+## 8. Frontend
 1. Tipos em `frontend/src/types/recursos.ts` (`Recurso`, `RecursoPayload`).
 2. `frontend/src/pages/recursos/RecursosListPage.tsx`: `usePaginatedList<Recurso>("/recursos")` + `DataTable<Recurso>` + `Pagination` + `ConfirmDialog` para excluir.
 3. `frontend/src/pages/recursos/RecursoFormPage.tsx`: `useResourceForm` com `validar` (campos obrigatórios no cliente), `FormField`, erros da API por campo.
 4. Rotas em `frontend/src/routes/AppRoutes.tsx` (`/app/recursos`, `/app/recursos/novo`, `/app/recursos/:id/editar`) e link no menu de `pages/app/AppLayout.tsx`.
 5. Componentes exclusivos da tela ficam como funções separadas no mesmo arquivo ou em `pages/recursos/components/`.
 
-## 10. Fechamento
+## 9. Fechamento
 - Atualize `docs/COBERTURA-RUBRICA.md` e `docs/DECISOES.md`.
 - Commit em português no imperativo, sem assinatura de IA.

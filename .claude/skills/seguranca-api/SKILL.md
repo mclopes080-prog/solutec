@@ -13,7 +13,7 @@ Revise o diff (ou o arquivo pedido) contra cada item. Para cada falha, aponte `a
 - [ ] O token tem `sub` (id do usuário) e `expiresIn`; nada sensível no payload (sem e-mail, CPF ou hash).
 - [ ] `JWT_SECRET` é obrigatório e tem ≥ 32 caracteres (validação no `env.ts`); nunca tem valor padrão no código.
 - [ ] Login: e-mail inexistente e senha errada → **mesma** resposta 401 e tempo parecido (bcrypt contra hash fictício).
-- [ ] Senhas só com bcrypt (`BCRYPT_ROUNDS` ≥ 10); hash nunca aparece em resposta, log ou Bruno.
+- [ ] Senhas só com bcrypt (`BCRYPT_ROUNDS` ≥ 10); hash nunca aparece em resposta ou log.
 
 ## 2. Autorização / ownership
 - [ ] O id do usuário vem **só** de `req.usuarioId` (token), nunca de body, query ou params.
@@ -38,7 +38,7 @@ Revise o diff (ou o arquivo pedido) contra cada item. Para cada falha, aponte `a
 ## 5. Segredos e arquivos sensíveis
 - [ ] Nenhum `.env` versionado (`git ls-files | grep -E "\.env($|\.)"` só pode listar `.env.example`).
 - [ ] `.claude/settings.json` mantém o `permissions.deny` de `.env`; Codex segue a mesma regra (ver `AGENTS.md`).
-- [ ] Nenhum segredo real em código, testes (`vitest.config.ts` usa valores fictícios), Bruno (`token` é `vars:secret`) ou docs.
+- [ ] Nenhum segredo real em código, testes (`vitest.config.ts` usa valores fictícios) ou docs.
 - [ ] Credenciais de demonstração do seed são fictícias e documentadas como tal.
 
 ## 6. Frontend

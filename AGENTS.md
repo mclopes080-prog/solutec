@@ -10,7 +10,6 @@ Plataforma acadêmica da **Solutec**, loja de segurança eletrônica (câmeras, 
 |---|---|
 | `backend/` | Node 20+, Express 5, TypeScript strict, Prisma 6 + MySQL 8, Zod 4, bcrypt, jsonwebtoken, Vitest |
 | `frontend/` | React 18, Vite 6, TypeScript strict, React Router 7, Axios, CSS Modules |
-| `bruno/` | Coleção HTTP (Bruno) com ambiente `local` |
 | `docs/` | Análise estatística, persona, decisões, defesa técnica e cobertura da rubrica |
 
 Ambiente do dono do repositório: **Windows + XAMPP (MySQL em `localhost:3306`)**. **Não introduza Docker**, Nginx, CI ou deploy.
@@ -77,7 +76,7 @@ Uma tarefa só está pronta quando:
 
 1. `npm run prisma:generate -w backend && npm run typecheck && npm test && npm run build` passam sem erro.
 2. Não existe `.js`/`.jsx` em `backend/src` nem em `frontend/src`, nem `any`.
-3. Regra nova tem teste unitário; rota nova tem requisição na coleção Bruno.
+3. Regra nova tem teste unitário; rota nova tem caso em `backend/tests/http.contrato.test.ts`.
 4. Mudança de banco veio por **nova** migration versionada.
 5. `docs/DECISOES.md` e `docs/COBERTURA-RUBRICA.md` foram atualizados quando a tarefa afeta a rubrica.
 
@@ -87,7 +86,7 @@ Uma tarefa só está pronta quando:
 - **Não altere migrations existentes** em `backend/prisma/migrations/`. Mudança de schema = nova pasta de migration. Sem banco disponível, gere com:
   `npx prisma migrate diff --from-schema-datamodel <schema-anterior> --to-schema-datamodel prisma/schema.prisma --script`
 - **Não instale dependência** sem justificar na descrição do PR/entrega (por que é necessária e por que a stack atual não resolve).
-- **Segredos:** **nunca leia, imprima, copie ou commite `.env` nem credenciais** (`backend/.env`, `frontend/.env`, `.env.local` etc.). Use apenas `.env.example`, que contém só marcadores. Não coloque segredos em código, testes, logs, Bruno ou docs.
+- **Segredos:** **nunca leia, imprima, copie ou commite `.env` nem credenciais** (`backend/.env`, `frontend/.env`, `.env.local` etc.). Use apenas `.env.example`, que contém só marcadores. Não coloque segredos em código, testes, logs ou docs.
 - Não introduza Docker, Nginx, CI, deploy, carrinho, checkout ou pagamento: estão fora do escopo.
 
 ### Proteção de `.env` aplicada de fato
@@ -102,6 +101,6 @@ Ficam em `.claude/skills/` (o Codex pode ler os mesmos arquivos como instruçõe
 
 | Skill | Quando usar |
 |---|---|
-| `novo-crud` | Criar um recurso novo de ponta a ponta (entidade → repositório → serviço → controller → rotas → testes → Bruno → telas). |
+| `novo-crud` | Criar um recurso novo de ponta a ponta (entidade → repositório → serviço → controller → rotas → testes → telas). |
 | `revisar-rubrica` | Conferir a tabela de `docs/COBERTURA-RUBRICA.md` e apontar o que falta, com arquivo e linha. |
 | `seguranca-api` | Revisar auth, ownership, validação, mensagens de erro e segredos antes de entregar. |

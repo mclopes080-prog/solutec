@@ -10,7 +10,7 @@ Roteiro de cerca de **10 minutos** para a banca. Os caminhos citados são relati
 | 4:00–7:00 | POO, TypeScript e SOLID | Tabela "onde está cada pilar" (abrir 3 ou 4 arquivos) |
 | 7:00–8:30 | Demo dos CRUDs | Criar pedido → preço congelado → transição de status inválida (422) |
 | 8:30–9:30 | Dados e decisões | `docs/analise-estatistica.md` (métricas de negócio) e `docs/DECISOES.md` |
-| 9:30–10:00 | Qualidade | `npm test` (119 testes), Bruno, `AGENTS.md` e skills |
+| 9:30–10:00 | Qualidade | `npm test` (119 testes), `AGENTS.md` e skills |
 
 ## 1. Arquitetura em camadas
 
